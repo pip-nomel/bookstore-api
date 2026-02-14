@@ -4,10 +4,10 @@
   "description": "Bookstore REST API - Express + TypeScript + Prisma + SQLite",
   "main": "dist/index.js",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
+    "dev": "tsx watch --env-file=.env src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js",
-    "seed": "tsx prisma/seed.ts",
+    "start": "node --env-file=.env dist/index.js",
+    "seed": "tsx --env-file=.env prisma/seed.ts",
     "prisma:migrate": "prisma migrate dev",
     "prisma:generate": "prisma generate",
     "postinstall": "prisma generate"
