@@ -7,6 +7,26 @@ import { NotFoundError, ValidationError, ConflictError } from '../lib/errors';
 
 export const booksRouter = Router();
 
+// GET /api/books/suggestions
+booksRouter.get('/suggestions', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const q = typeof req.query.q === 'string' ? req.query.q : '';
+    if (!q) {
+      return res.json({ data: [] });
+    }
+
+    const books = await prisma.book.findMany({
+      where: { title: { contains: q }, deletedAt: null },
+      select: { id: true, title: true },
+      take: 5,
+    });
+
+    res.json({ data: books });
+  } catch (err) {
+    next(err);
+  }
+});
+
 // GET /api/books
 booksRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -24,16 +44,27 @@ booksRouter.get('/', async (req: Request, res: Response, next: NextFunction) => 
       where.categoryId = categoryId;
     }
 
-    const [books, total] = await Promise.all([
+    const [rawBooks, total] = await Promise.all([
       prisma.book.findMany({
         where,
         skip,
         take: limit,
-        include: { category: true },
+        include: {
+          category: true,
+          reviews: { select: { rating: true } },
+        },
         orderBy: { createdAt: 'desc' },
       }),
       prisma.book.count({ where }),
     ]);
+
+    const books = rawBooks.map(({ reviews, ...book }) => ({
+      ...book,
+      reviewCount: reviews.length,
+      avgRating: reviews.length > 0
+        ? Math.round((reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length) * 100) / 100
+        : null,
+    }));
 
     res.json({
       data: books,
@@ -68,7 +99,13 @@ booksRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) 
       throw new NotFoundError('Book');
     }
 
-    res.json({ data: book });
+    const { reviews, ...rest } = book;
+    const reviewCount = reviews.length;
+    const avgRating = reviewCount > 0
+      ? Math.round((reviews.reduce((sum, r) => sum + r.rating, 0) / reviewCount) * 100) / 100
+      : null;
+
+    res.json({ data: { ...rest, reviews, reviewCount, avgRating } });
   } catch (err) {
     next(err);
   }

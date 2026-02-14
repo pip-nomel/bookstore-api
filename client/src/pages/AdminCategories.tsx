@@ -22,29 +22,29 @@ export default function AdminCategories() {
     },
   });
 
-  if (isLoading) return <p className="text-center mt-10">Loading...</p>;
+  if (isLoading) return <p className="text-center mt-10 text-gray-400">Loading...</p>;
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">Manage Categories</h1>
+      <h1 className="text-3xl font-bold text-gray-100 mb-6">Manage Categories</h1>
 
-      <div className="border rounded p-4 mb-8">
-        <h2 className="font-semibold mb-3">Add Category</h2>
+      <div className="bg-gray-800 border border-gray-700 rounded-lg p-4 mb-8">
+        <h2 className="font-semibold text-gray-100 mb-3">Add Category</h2>
         <div className="flex gap-3">
-          <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} className="border rounded px-3 py-2 flex-1" />
-          <input type="text" placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} className="border rounded px-3 py-2 flex-2" />
-          <button onClick={() => addCategory.mutate()} disabled={!name || !description} className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 disabled:opacity-50">Add</button>
+          <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} className="bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-gray-100 flex-1 focus:outline-none focus:border-emerald-500" />
+          <input type="text" placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} className="bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-gray-100 flex-[2] focus:outline-none focus:border-emerald-500" />
+          <button onClick={() => addCategory.mutate()} disabled={!name || !description} className="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-500 disabled:opacity-50 transition-colors">Add</button>
         </div>
       </div>
 
       <div className="space-y-3">
         {categories?.map((c) => (
-          <div key={c.id} className="border rounded p-4 flex justify-between items-center">
+          <div key={c.id} className="bg-gray-800 border border-gray-700 rounded-lg p-4 flex justify-between items-center">
             <div>
-              <p className="font-semibold">{c.name}</p>
-              <p className="text-sm text-gray-500">{c.description}</p>
+              <p className="font-semibold text-gray-100">{c.name}</p>
+              <p className="text-sm text-gray-400">{c.description}</p>
             </div>
-            <span className="text-sm text-gray-400">{c._count?.books || 0} books</span>
+            <span className="text-sm text-gray-500">{c._count?.books || 0} books</span>
           </div>
         ))}
       </div>

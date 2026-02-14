@@ -124,8 +124,14 @@ ordersRouter.post('/', authenticate, async (req: Request, res: Response, next: N
   }
 });
 
-// PATCH /api/orders/:id/status (admin only)
-ordersRouter.patch('/:id/status', authenticate, requireAdmin, async (req: Request, res: Response, next: NextFunction) => {
+// PATCH /api/orders/:id/status
+const VALID_TRANSITIONS: Record<string, string[]> = {
+  PENDING: ['CONFIRMED', 'CANCELLED'],
+  CONFIRMED: ['SHIPPED'],
+  SHIPPED: ['DELIVERED'],
+};
+
+ordersRouter.patch('/:id/status', authenticate, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = parseInt(req.params.id as string, 10);
     const { status } = updateOrderStatusSchema.parse(req.body);
@@ -135,9 +141,36 @@ ordersRouter.patch('/:id/status', authenticate, requireAdmin, async (req: Reques
       throw new NotFoundError('Order');
     }
 
-    const updated = await prisma.order.update({
+    const allowed = VALID_TRANSITIONS[order.status] || [];
+    if (!allowed.includes(status)) {
+      throw new ValidationError(`Cannot transition from ${order.status} to ${status}`);
+    }
+
+    // Non-admin users can only cancel their own PENDING orders
+    if (req.user!.role !== 'ADMIN') {
+      if (status !== 'CANCELLED' || order.status !== 'PENDING' || order.userId !== req.user!.userId) {
+        throw new ForbiddenError('Only admins can update order status');
+      }
+    }
+
+    // Restore stock on cancellation
+    if (status === 'CANCELLED') {
+      const items = await prisma.orderItem.findMany({ where: { orderId: id } });
+      await prisma.$transaction(async (tx) => {
+        for (const item of items) {
+          await tx.book.update({
+            where: { id: item.bookId },
+            data: { stock: { increment: item.quantity } },
+          });
+        }
+        await tx.order.update({ where: { id }, data: { status } });
+      });
+    } else {
+      await prisma.order.update({ where: { id }, data: { status } });
+    }
+
+    const updated = await prisma.order.findUnique({
       where: { id },
-      data: { status },
       include: {
         items: { include: { book: { select: { id: true, title: true } } } },
       },

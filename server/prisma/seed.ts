@@ -5,6 +5,8 @@ const prisma = new PrismaClient();
 
 async function main() {
   // Clean up
+  await prisma.wishlist.deleteMany();
+  await prisma.coupon.deleteMany();
   await prisma.review.deleteMany();
   await prisma.orderItem.deleteMany();
   await prisma.order.deleteMany();
@@ -95,6 +97,19 @@ async function main() {
   await prisma.review.create({
     data: { userId: user.id, bookId: books[4].id, rating: 4, comment: 'Epic world-building. A must-read for sci-fi fans.' },
   });
+
+  // Coupons
+  await Promise.all([
+    prisma.coupon.create({
+      data: { code: 'SAVE10', type: 'PERCENTAGE', value: 10, minOrder: 20 },
+    }),
+    prisma.coupon.create({
+      data: { code: 'FLAT5', type: 'FIXED', value: 5, minOrder: 15 },
+    }),
+    prisma.coupon.create({
+      data: { code: 'WELCOME', type: 'PERCENTAGE', value: 20, maxUses: 1 },
+    }),
+  ]);
 
   console.log('Seed data created successfully!');
   console.log(`Admin: admin@bookstore.com / admin123`);

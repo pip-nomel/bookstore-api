@@ -5,6 +5,9 @@ import { booksRouter } from './routes/books';
 import { categoriesRouter } from './routes/categories';
 import { ordersRouter } from './routes/orders';
 import { reviewsRouter } from './routes/reviews';
+import { wishlistRouter } from './routes/wishlist';
+import { couponsRouter } from './routes/coupons';
+import { profileRouter } from './routes/profile';
 import { errorHandler } from './middleware/errorHandler';
 
 const app = express();
@@ -19,6 +22,9 @@ app.use('/api/books', booksRouter);
 app.use('/api/categories', categoriesRouter);
 app.use('/api/orders', ordersRouter);
 app.use('/api/reviews', reviewsRouter);
+app.use('/api/wishlist', wishlistRouter);
+app.use('/api/coupons', couponsRouter);
+app.use('/api/profile', profileRouter);
 
 // Health check
 app.get('/api/health', (_req, res) => {

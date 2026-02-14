@@ -3,6 +3,7 @@ export interface User {
   email: string;
   name: string;
   role: string;
+  createdAt?: string;
 }
 
 export interface Category {
@@ -22,6 +23,7 @@ export interface Book {
   categoryId: number;
   category?: Category;
   reviews?: Review[];
+  avgRating?: number;
   createdAt: string;
 }
 
@@ -63,4 +65,26 @@ export interface Pagination {
   limit: number;
   total: number;
   totalPages: number;
+}
+
+export interface WishlistItem {
+  id: number;
+  userId: number;
+  bookId: number;
+  createdAt: string;
+  book: Book;
+}
+
+export interface CouponValidation {
+  code: string;
+  type: string;
+  value: number;
+  discount: number;
+  finalTotal: number;
+}
+
+export interface SearchSuggestion {
+  id: number;
+  title: string;
+  author: string;
 }

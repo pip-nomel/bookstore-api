@@ -22,4 +22,22 @@ api.interceptors.response.use(
   }
 );
 
+// Wishlist
+export const getWishlist = () => api.get('/wishlist').then((r) => r.data.data);
+export const addToWishlist = (bookId: number) => api.post(`/wishlist/${bookId}`);
+export const removeFromWishlist = (bookId: number) => api.delete(`/wishlist/${bookId}`);
+
+// Coupons
+export const validateCoupon = (code: string, orderTotal: number) =>
+  api.post('/coupons/validate', { code, orderTotal }).then((r) => r.data.data);
+
+// Profile
+export const getProfile = () => api.get('/profile').then((r) => r.data.data);
+export const updateProfile = (data: { name?: string; email?: string; currentPassword: string }) =>
+  api.put('/profile', data).then((r) => r.data.data);
+
+// Search suggestions
+export const getSearchSuggestions = (q: string) =>
+  api.get('/books/suggestions', { params: { q } }).then((r) => r.data.data);
+
 export default api;

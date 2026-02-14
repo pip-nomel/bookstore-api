@@ -14,6 +14,9 @@ import OrderDetail from './pages/OrderDetail';
 import Admin from './pages/Admin';
 import AdminBookForm from './pages/AdminBookForm';
 import AdminCategories from './pages/AdminCategories';
+import Wishlist from './pages/Wishlist';
+import Profile from './pages/Profile';
+import { Toaster } from 'react-hot-toast';
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, refetchOnWindowFocus: false } },
@@ -25,7 +28,7 @@ export default function App() {
       <BrowserRouter>
         <AuthProvider>
           <CartProvider>
-            <div className="min-h-screen bg-gray-50">
+            <div className="min-h-screen bg-gray-950">
               <Navbar />
               <Routes>
                 <Route path="/" element={<Navigate to="/books" />} />
@@ -40,7 +43,10 @@ export default function App() {
                 <Route path="/admin/books/new" element={<ProtectedRoute adminOnly><AdminBookForm /></ProtectedRoute>} />
                 <Route path="/admin/books/:id/edit" element={<ProtectedRoute adminOnly><AdminBookForm /></ProtectedRoute>} />
                 <Route path="/admin/categories" element={<ProtectedRoute adminOnly><AdminCategories /></ProtectedRoute>} />
+                <Route path="/wishlist" element={<ProtectedRoute><Wishlist /></ProtectedRoute>} />
+                <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
               </Routes>
+              <Toaster position="bottom-right" toastOptions={{ style: { background: '#1f2937', color: '#f3f4f6' } }} />
             </div>
           </CartProvider>
         </AuthProvider>

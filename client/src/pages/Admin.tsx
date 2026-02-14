@@ -22,36 +22,36 @@ export default function Admin() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">Admin Dashboard</h1>
+      <h1 className="text-3xl font-bold text-gray-100 mb-8">Admin Dashboard</h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-        <div className="bg-blue-50 rounded-lg p-6 text-center">
-          <p className="text-3xl font-bold text-blue-700">{totalBooks}</p>
-          <p className="text-gray-600">Books</p>
+        <div className="bg-gray-800 rounded-lg p-6 text-center">
+          <p className="text-3xl font-bold text-blue-400">{totalBooks}</p>
+          <p className="text-gray-400">Books</p>
         </div>
-        <div className="bg-green-50 rounded-lg p-6 text-center">
-          <p className="text-3xl font-bold text-green-700">{totalOrders}</p>
-          <p className="text-gray-600">Orders</p>
+        <div className="bg-gray-800 rounded-lg p-6 text-center">
+          <p className="text-3xl font-bold text-emerald-400">{totalOrders}</p>
+          <p className="text-gray-400">Orders</p>
         </div>
-        <div className="bg-purple-50 rounded-lg p-6 text-center">
-          <p className="text-3xl font-bold text-purple-700">{categories?.length || 0}</p>
-          <p className="text-gray-600">Categories</p>
+        <div className="bg-gray-800 rounded-lg p-6 text-center">
+          <p className="text-3xl font-bold text-purple-400">{categories?.length || 0}</p>
+          <p className="text-gray-400">Categories</p>
         </div>
-        <div className="bg-yellow-50 rounded-lg p-6 text-center">
-          <p className="text-3xl font-bold text-yellow-700">${revenue.toFixed(2)}</p>
-          <p className="text-gray-600">Revenue</p>
+        <div className="bg-gray-800 rounded-lg p-6 text-center">
+          <p className="text-3xl font-bold text-yellow-400">${revenue.toFixed(2)}</p>
+          <p className="text-gray-400">Revenue</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Link to="/books" className="border rounded-lg p-6 text-center hover:shadow-md transition-shadow">
-          <p className="text-xl font-semibold">📚 Manage Books</p>
+        <Link to="/books" className="bg-gray-800 border border-gray-700 rounded-lg p-6 text-center hover:bg-gray-700 transition-colors">
+          <p className="text-xl font-semibold text-gray-100">📚 Manage Books</p>
         </Link>
-        <Link to="/orders" className="border rounded-lg p-6 text-center hover:shadow-md transition-shadow">
-          <p className="text-xl font-semibold">📦 Manage Orders</p>
+        <Link to="/orders" className="bg-gray-800 border border-gray-700 rounded-lg p-6 text-center hover:bg-gray-700 transition-colors">
+          <p className="text-xl font-semibold text-gray-100">📦 Manage Orders</p>
         </Link>
-        <Link to="/admin/categories" className="border rounded-lg p-6 text-center hover:shadow-md transition-shadow">
-          <p className="text-xl font-semibold">🏷️ Manage Categories</p>
+        <Link to="/admin/categories" className="bg-gray-800 border border-gray-700 rounded-lg p-6 text-center hover:bg-gray-700 transition-colors">
+          <p className="text-xl font-semibold text-gray-100">🏷️ Manage Categories</p>
         </Link>
       </div>
     </div>
